@@ -1,0 +1,40 @@
+# 🚀 Quick Fix: iOS CocoaPods Conflict
+
+## Run This Command (macOS/Linux):
+
+```bash
+cd /Users/ayushnaik/AndroidStudioProjects/multiversesss && chmod +x fix_ios_pods.sh && ./fix_ios_pods.sh
+```
+
+## Or Run This (Windows PowerShell):
+
+```powershell
+cd C:\path\to\multiversesss && .\fix_ios_pods.ps1
+```
+
+## Or Manual Steps:
+
+```bash
+# 1. Clean everything
+flutter clean
+rm -rf ios/Pods ios/Podfile.lock build/ios
+
+# 2. Get dependencies
+flutter pub get
+
+# 3. Install pods
+cd ios && pod repo update && pod install --repo-update
+```
+
+## ✅ Done!
+
+Open Xcode and build again:
+```bash
+open ios/Runner.xcworkspace
+```
+
+Then: Product → Clean Build Folder → Build
+
+---
+
+**Need details?** See [FIX_IOS_PODS_GUIDE.md](FIX_IOS_PODS_GUIDE.md)

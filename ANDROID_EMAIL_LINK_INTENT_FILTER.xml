@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  FIREBASE EMAIL LINK - ANDROID MANIFEST CONFIGURATION
+  
+  Add this intent filter inside your main <activity> tag in:
+  android/app/src/main/AndroidManifest.xml
+  
+  This enables the app to receive email links when users click them.
+-->
+
+<!-- COPY FROM HERE -->
+<intent-filter android:autoVerify="true">
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data
+        android:host="multiversesss.page.link"
+        android:scheme="https" />
+</intent-filter>
+<!-- TO HERE -->
+
+<!-- 
+  EXAMPLE OF COMPLETE ACTIVITY TAG:
+  
+  <activity
+      android:name=".MainActivity"
+      android:exported="true"
+      android:launchMode="singleTop"
+      android:theme="@style/LaunchTheme"
+      android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+      android:hardwareAccelerated="true"
+      android:windowSoftInputMode="adjustResize">
+      
+      <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      
+      ADD THE INTENT FILTER HERE ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      
+  </activity>
+-->
+
+<!-- 
+  IMPORTANT NOTES:
+  
+  1. Replace "multiversesss.page.link" with your actual Firebase Dynamic Links domain
+  2. Must be inside the <activity> tag that has LAUNCHER intent filter
+  3. android:autoVerify="true" enables automatic verification of deep links
+  4. Both https and http schemes should work, but https is recommended
+-->

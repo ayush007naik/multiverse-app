@@ -1,0 +1,75 @@
+================================================================================
+  🚀 QUICK FIX: Xcode Project Parse Error (Line 261)
+================================================================================
+
+❌ ERROR:
+   "missing semicolon in dictionary on line 261"
+   "Unable to read project 'Runner.xcodeproj'"
+
+✅ CAUSE:
+   Unescaped quotes in shellScript line of project.pbxproj
+
+================================================================================
+  FIX OPTION 1: Run Script (EASIEST)
+================================================================================
+
+cd /Users/ayushnaik/AndroidStudioProjects/multiversesss
+chmod +x fix_xcode_project.sh
+./fix_xcode_project.sh
+
+Then test:
+flutter build ios --no-codesign
+
+================================================================================
+  FIX OPTION 2: Manual Command
+================================================================================
+
+cd /Users/ayushnaik/AndroidStudioProjects/multiversesss
+
+# Backup first
+cp ios/Runner.xcodeproj/project.pbxproj ios/Runner.xcodeproj/project.pbxproj.backup
+
+# Fix line 261
+sed -i '' '261s|.*|\t\t\tshellScript = "export PATH=\\\"\\$PATH:/Users/ayushnaik/flutter/bin\\\"\\nset -e\\n/bin/sh \\\"\\$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\\\" build";|' ios/Runner.xcodeproj/project.pbxproj
+
+# Test
+flutter build ios --no-codesign
+
+================================================================================
+  FIX OPTION 3: Regenerate iOS (NUCLEAR OPTION)
+================================================================================
+
+cd /Users/ayushnaik/AndroidStudioProjects/multiversesss
+
+# Backup
+mv ios ios.backup
+
+# Regenerate
+flutter create --platforms=ios .
+
+# Restore configs
+cp ios.backup/Podfile ios/Podfile 2>/dev/null || true
+cp ios.backup/Runner/GoogleService-Info.plist ios/Runner/ 2>/dev/null || true
+
+# Clean & rebuild
+flutter clean && flutter pub get
+cd ios && pod install && cd ..
+flutter build ios --no-codesign
+
+================================================================================
+  ✅ VERIFICATION
+================================================================================
+
+After fix, you should see:
+✅ No "parse error" messages
+✅ "flutter build ios" completes successfully
+✅ Xcode opens project without errors
+
+================================================================================
+  📚 DOCUMENTATION
+================================================================================
+
+Full guide: FIX_XCODE_PROJECT_GUIDE.md
+Fix script: fix_xcode_project.sh
+
+================================================================================
