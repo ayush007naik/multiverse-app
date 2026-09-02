@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiverse Invoice</title>
+    <link rel="stylesheet" href="invoice.css">
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="brand">
+                    <h1>MULTIVERSE</h1>
+                    <p class="tagline">Premium Marketplace</p>
+                </div>
+                <div class="invoice-badge">
+                    <span class="badge">TAX INVOICE</span>
+                    <p class="invoice-number">{{invoiceNo}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Badge -->
+        <div class="status-section">
+            <div class="status-badge paid">✓ PAYMENT CONFIRMED</div>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-label">Order ID</div>
+                <div class="info-value">{{orderId}}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Date & Time</div>
+                <div class="info-value">{{date}}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Payment Method</div>
+                <div class="info-value">{{paymentMethod}}</div>
+            </div>
+        </div>
+
+        <!-- Customer & Store Details -->
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3 class="detail-title">BILL TO</h3>
+                <div class="detail-content">
+                    <p class="name">{{customerName}}</p>
+                    <p class="phone">📞 {{phone}}</p>
+                    <p class="email">✉️ {{email}}</p>
+                    <p class="address">{{address}}</p>
+                </div>
+            </div>
+            <div class="detail-card">
+                <h3 class="detail-title">FROM</h3>
+                <div class="detail-content">
+                    <p class="name">{{storeName}}</p>
+                    <p class="gstin">GSTIN: {{gstin}}</p>
+                    <p class="address">{{storeAddress}}</p>
+                    <p class="phone">📞 {{storePhone}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="items-section">
+            <h3 class="section-title">Order Items</h3>
+            <div class="items-table">
+                <div class="table-header">
+                    <div class="col-item">Item</div>
+                    <div class="col-qty">Qty</div>
+                    <div class="col-price">Price</div>
+                    <div class="col-total">Total</div>
+                </div>
+                {{itemsRows}}
+            </div>
+        </div>
+
+        <!-- Bill Summary -->
+        <div class="summary-section">
+            <div class="summary-row">
+                <span class="label">Subtotal</span>
+                <span class="value">₹{{subtotal}}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">CGST + SGST (5%)</span>
+                <span class="value">₹{{gst}}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Delivery Charges</span>
+                <span class="value">₹{{deliveryFee}}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Platform Fee</span>
+                <span class="value">₹{{platformFee}}</span>
+            </div>
+            {{discountRow}}
+            <div class="divider"></div>
+            <div class="summary-row grand-total">
+                <span class="label">Grand Total</span>
+                <span class="value">₹{{total}}</span>
+            </div>
+        </div>
+
+        <!-- QR Code & Verification -->
+        <div class="verification-section">
+            <div class="qr-code">
+                <img src="{{qrCode}}" alt="QR Code" class="qr-image">
+                <p class="qr-label">Scan to verify invoice</p>
+            </div>
+            <div class="verification-info">
+                <p class="verify-text">This is a computer-generated invoice</p>
+                <p class="verify-id">Verification ID: {{verificationId}}</p>
+            </div>
+        </div>
+
+        <!-- Download App -->
+        <div class="app-download">
+            <p class="app-title">📱 Download Multiverse City App</p>
+            <p class="app-text">For shopping, online booking, appointment & real estate</p>
+            <div class="app-badges">
+                <a href="https://play.google.com/store/apps/details?id=com.multiverse.city"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" height="36"></a>
+                <a href="https://apps.apple.com/app/multiverse-city/id123456789"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" height="36"></a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="thank-you">Thanks for choosing Multiverse City 🎉</p>
+            <p class="support">Need help? Contact us at support@multiverse.com | +91 7018741456</p>
+            <p class="copyright">© 2026 Multiverse. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

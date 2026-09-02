@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.ayush.multiverse.multiverses.app-mergeDebugResources-87:/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "/Users/ayushnaik/.gradle/caches/8.14/transforms/0fdb5ead5d6eea0b3fbeaee869469b70/transformed/appcompat-1.7.1/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    }
+                }
+            ]
+        }
+    ]
+}

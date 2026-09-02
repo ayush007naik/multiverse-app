@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.ayush.multiverse.multiverses.app-mergeDebugResources-87:/values-large-v4/values-large-v4.xml",
+            "map": [
+                {
+                    "source": "/Users/ayushnaik/.gradle/caches/8.14/transforms/0fdb5ead5d6eea0b3fbeaee869469b70/transformed/appcompat-1.7.1/res/values-large-v4/values-large-v4.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,114,185,256,326,396,464,532,636",
+                        "endColumns": "58,70,70,69,69,67,67,103,115",
+                        "endOffsets": "109,180,251,321,391,459,527,631,747"
+                    }
+                }
+            ]
+        }
+    ]
+}

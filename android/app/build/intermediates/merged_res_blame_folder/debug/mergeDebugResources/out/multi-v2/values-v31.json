@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.ayush.multiverse.multiverses.app-mergeDebugResources-87:/values-v31/values-v31.xml",
+            "map": [
+                {
+                    "source": "/Users/ayushnaik/AndroidStudioProjects/multiversesss/android/app/src/main/res/values-v31/styles.xml",
+                    "from": {
+                        "startLines": "2,11",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,671",
+                        "endLines": "10,13",
+                        "endColumns": "12,12",
+                        "endOffsets": "666,818"
+                    }
+                }
+            ]
+        }
+    ]
+}

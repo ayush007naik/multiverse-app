@@ -1,0 +1,94 @@
+name: vendor_dashboard
+description: MULTIVERSE Vendor Dashboard - Production Ready Web App
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^3.10.1
+  firebase_auth: ^5.4.1
+  supabase_flutter: ^2.17.1
+  db_compat:
+    path: ../db_compat
+  firebase_messaging: ^15.2.1
+
+  # UI & Charts
+  fl_chart: ^1.2.0
+  google_fonts: ^6.1.0
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
+  carousel_slider: ^5.0.0
+
+  # Utilities
+  provider: ^6.1.1
+  image_picker: ^1.0.7
+  file_picker: ^8.1.2
+  excel: ^4.0.6
+  csv: ^6.0.0
+  image: ^4.3.0
+  geolocator: ^10.1.0
+  geocoding: ^5.0.0
+  google_maps_flutter: ^2.17.1
+  intl: ^0.19.0
+  http: ^1.6.0
+  path_provider: ^2.1.5
+  pdf: ^3.10.8
+  printing: ^5.11.0
+  open_file: ^3.3.2
+  shared_preferences: ^2.2.3
+  
+  cupertino_icons: ^1.0.8
+  url_launcher: ^6.3.2
+  audioplayers: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
+    - assets/sounds/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/vendor.png"
+  adaptive_icon_background: "#0D0518"
+  adaptive_icon_foreground: "assets/vendor.png"
+  adaptive_icon_padding: 0.15
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/vendor.png"
+    background_color: "#0D0518"
+    theme_color: "#0D0518"
+  windows:
+    generate: true
+    image_path: "assets/vendor.png"
+    background_color: "#0D0518"
+  macos:
+    generate: true
+    image_path: "assets/vendor.png"
+    background_color: "#0D0518"
+  generate_favicons: true
+
+flutter_native_splash:
+  color: "#000000"
+  image: assets/vendor.png
+  android: true
+  ios: true
+  web: false
+  android_gravity: center
+  ios_content_mode: center

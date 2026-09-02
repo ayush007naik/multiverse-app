@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Shop Location</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📍 Update Shop GPS Location</h1>
+        <p>Update your shop coordinates in Firebase Firestore</p>
+        
+        <div class="form-group">
+            <label for="vendorId">Vendor ID (from Firebase Authentication):</label>
+            <input type="text" id="vendorId" placeholder="e.g., abc123def456..." value="">
+        </div>
+        
+        <div class="form-group">
+            <label for="latitude">Latitude:</label>
+            <input type="number" id="latitude" step="any" value="31.6171822" placeholder="31.6171822">
+        </div>
+        
+        <div class="form-group">
+            <label for="longitude">Longitude:</label>
+            <input type="number" id="longitude" step="any" value="76.9000305" placeholder="76.9000305">
+        </div>
+        
+        <button id="updateBtn" onclick="updateShopLocation()">Update Shop Location</button>
+        
+        <div id="status"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // ============================================
+        // TODO: Replace with your Firebase config
+        // Get this from: Firebase Console → Project Settings → Your apps → Web app
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function updateShopLocation() {
+            const vendorId = document.getElementById('vendorId').value.trim();
+            const latitude = parseFloat(document.getElementById('latitude').value);
+            const longitude = parseFloat(document.getElementById('longitude').value);
+            const statusDiv = document.getElementById('status');
+            const updateBtn = document.getElementById('updateBtn');
+
+            // Validation
+            if (!vendorId) {
+                showStatus('❌ Please enter your Vendor ID', 'error');
+                return;
+            }
+
+            if (isNaN(latitude) || latitude < -90 || latitude > 90) {
+                showStatus('❌ Please enter a valid latitude (-90 to 90)', 'error');
+                return;
+            }
+
+            if (isNaN(longitude) || longitude < -180 || longitude > 180) {
+                showStatus('❌ Please enter a valid longitude (-180 to 180)', 'error');
+                return;
+            }
+
+            // Disable button
+            updateBtn.disabled = true;
+            updateBtn.textContent = 'Updating...';
+
+            try {
+                console.log('🔄 Updating shop location...');
+                console.log('Vendor ID:', vendorId);
+                console.log('Latitude:', latitude);
+                console.log('Longitude:', longitude);
+
+                // Update Firestore - explicitly as doubles
+                await db.collection('shops').doc(vendorId).update({
+                    lat: latitude,
+                    lng: longitude,
+                    location: {
+                        latitude: latitude,
+                        longitude: longitude
+                    },
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                console.log('✅ Update successful!');
+                showStatus(`
+                    ✅ <strong>Shop location updated successfully!</strong><br><br>
+                    📍 Vendor ID: ${vendorId}<br>
+                    📍 Latitude: ${latitude}<br>
+                    📍 Longitude: ${longitude}<br><br>
+                    🎉 Your customers will now see accurate distance calculations!
+                `, 'success');
+
+            } catch (error) {
+                console.error('❌ Error:', error);
+                showStatus(`
+                    ❌ <strong>Update failed:</strong><br>
+                    ${error.message}<br><br>
+                    <strong>Troubleshooting:</strong><br>
+                    1. Check if Vendor ID is correct<br>
+                    2. Make sure Firebase config is correct<br>
+                    3. Check browser console for detailed error<br>
+                    4. Verify Firestore security rules allow updates
+                `, 'error');
+            } finally {
+                updateBtn.disabled = false;
+                updateBtn.textContent = 'Update Shop Location';
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = message;
+            statusDiv.className = type;
+            statusDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

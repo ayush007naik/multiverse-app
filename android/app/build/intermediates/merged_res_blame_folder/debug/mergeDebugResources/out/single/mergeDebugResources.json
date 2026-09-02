@@ -1,0 +1,126 @@
+[
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable_ic_launcher_foreground_inset.xml.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable/ic_launcher_foreground_inset.xml"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xxxhdpi_splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xxxhdpi/splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-hdpi_splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-hdpi/splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xxhdpi_splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xxhdpi/splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xhdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xhdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-night-xxhdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-night-xxhdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xxxhdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xxxhdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/mipmap-anydpi-v26_launcher_icon.xml.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/mipmap-anydpi-v26/launcher_icon.xml"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-mdpi_splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-mdpi/splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-night-hdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-night-hdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/mipmap-xxhdpi_launcher_icon.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/mipmap-xxhdpi/launcher_icon.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable_splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable/splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-night-mdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-night-mdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/mipmap-mdpi_launcher_icon.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/mipmap-mdpi/launcher_icon.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xxhdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xxhdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-night-xhdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-night-xhdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/mipmap-xxxhdpi_launcher_icon.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/mipmap-xxxhdpi/launcher_icon.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-v21_background.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-v21/background.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable_android12splash_inset.xml.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable/android12splash_inset.xml"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-hdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-hdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/mipmap-xhdpi_launcher_icon.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/mipmap-xhdpi/launcher_icon.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-night-xxxhdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-night-xxxhdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-mdpi_android12splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-mdpi/android12splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-v21_launch_background.xml.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-v21/launch_background.xml"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/mipmap-hdpi_launcher_icon.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/mipmap-hdpi/launcher_icon.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-xhdpi_splash.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-xhdpi/splash.png"
+    },
+    {
+        "merged": "com.ayush.multiverse.multiverses.app-debug-89:/drawable-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.ayush.multiverse.multiverses.app-main-91:/drawable-hdpi/ic_launcher_foreground.png"
+    }
+]

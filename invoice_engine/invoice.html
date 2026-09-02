@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multiverse Invoice — {{invoice.number}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="invoice.css" />
+</head>
+<body>
+
+<div class="invoice-wrapper" id="invoice-root">
+
+  <!-- ══════════════════════════════════════
+       HEADER BANNER
+  ══════════════════════════════════════════ -->
+  <header class="invoice-header">
+    <div class="header-top">
+
+      <!-- Brand -->
+      <div class="brand-block">
+        <div class="brand-logo-circle">🌌</div>
+        <div class="brand-text">
+          <div class="brand-name">MULTIVERSE</div>
+          <div class="brand-tagline">Premium Experience</div>
+        </div>
+      </div>
+
+      <!-- QR + Status -->
+      <div class="header-right">
+        <div class="payment-badge">
+          <div id="payment-status-badge" class="status-pill paid">
+            <span class="status-dot"></span>
+            <span id="payment-status-text">PAID</span>
+          </div>
+          <div class="invoice-number-badge" id="header-inv-number">#INV-2024-00001</div>
+        </div>
+        <div class="qr-box">
+          <div id="qrcode"></div>
+          <div class="qr-label">Scan to verify</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-divider"></div>
+
+    <div class="invoice-title-row">
+      <div class="invoice-title">✦ &nbsp; Digital Tax Invoice &nbsp; ✦</div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       INVOICE BODY
+  ══════════════════════════════════════════ -->
+  <main class="invoice-body">
+
+    <!-- ── TOP INFO CARDS ─────────────────── -->
+    <div class="info-cards-row">
+      <div class="info-card">
+        <div class="info-card-icon">🧾</div>
+        <div class="info-card-label">Invoice No.</div>
+        <div class="info-card-value" id="inv-number">#INV-2024-00001</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">📦</div>
+        <div class="info-card-label">Order ID</div>
+        <div class="info-card-value" id="inv-order-id">#ORD-8842991</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">🕐</div>
+        <div class="info-card-label">Date &amp; Time</div>
+        <div class="info-card-value" id="inv-datetime">12 Jan '25, 7:42 PM</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">💳</div>
+        <div class="info-card-label">Payment</div>
+        <div class="info-card-value" id="inv-payment-method">UPI / GPay</div>
+      </div>
+    </div>
+
+    <!-- ── CUSTOMER + STORE ───────────────── -->
+    <div class="parties-section">
+
+      <!-- Bill To -->
+      <div class="party-card">
+        <div class="party-card-header">
+          <div class="party-card-icon">👤</div>
+          <div class="party-card-title">Bill To</div>
+        </div>
+        <div class="party-name" id="customer-name">Arjun Mehta</div>
+        <div class="party-detail">
+          <span class="party-detail-icon">📞</span>
+          <span class="party-detail-text" id="customer-phone">+91 98765 43210</span>
+        </div>
+        <div class="party-detail">
+          <span class="party-detail-icon">📍</span>
+          <span class="party-detail-text" id="customer-address">Flat 4B, Rosewood Apartments,<br>Koramangala, Bengaluru — 560034</span>
+        </div>
+      </div>
+
+      <!-- Store Details -->
+      <div class="party-card">
+        <div class="party-card-header">
+          <div class="party-card-icon">🏪</div>
+          <div class="party-card-title">Store Details</div>
+        </div>
+        <div class="party-name" id="store-name">Multiverse Dark Store #12</div>
+        <div class="party-detail">
+          <span class="party-detail-icon">🏢</span>
+          <span class="party-detail-text" id="store-address">Plot 7, Sector 4, Industrial Area,<br>HSR Layout, Bengaluru — 560102</span>
+        </div>
+        <div class="party-detail">
+          <span class="party-detail-icon">📞</span>
+          <span class="party-detail-text" id="store-phone">Support: 1800-XXX-XXXX</span>
+        </div>
+        <div class="gstin-badge" id="store-gstin">✓ &nbsp; GSTIN: 29AABCU9603R1ZX</div>
+      </div>
+    </div>
+
+    <!-- ── ORDER ITEMS TABLE ──────────────── -->
+    <div class="items-section">
+      <div class="section-title">Order Items</div>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th style="width: 42%">Product</th>
+            <th class="col-qty">Qty</th>
+            <th class="col-price">Unit Price</th>
+            <th class="col-total">Total</th>
+          </tr>
+        </thead>
+        <tbody id="items-tbody">
+          <!-- Injected by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── BILL SUMMARY ───────────────────── -->
+    <div class="bill-summary-section">
+
+      <div class="bill-notes">
+        <div class="bill-note-card">
+          <strong>🎁 Coupon Applied</strong><br>
+          Code <strong id="coupon-code">NEWUSER50</strong> — You saved <strong id="coupon-saving">₹50</strong> on this order!
+        </div>
+        <div class="bill-note-card tax-note">
+          <strong>🧾 Tax Summary</strong><br>
+          CGST @ 2.5% + SGST @ 2.5% = Total <strong>5% GST</strong> inclusive in item prices as per GST regulations.
+        </div>
+      </div>
+
+      <div class="bill-summary-card">
+        <div class="bill-summary-header">Bill Summary</div>
+        <div class="bill-line">
+          <span class="bill-line-label"><span class="bill-line-icon">🛒</span> Item Total</span>
+          <span class="bill-line-value" id="summary-subtotal">₹598.00</span>
+        </div>
+        <div class="bill-line">
+          <span class="bill-line-label"><span class="bill-line-icon">🛵</span> Delivery Fee</span>
+          <span class="bill-line-value" id="summary-delivery">₹29.00</span>
+        </div>
+        <div class="bill-line">
+          <span class="bill-line-label"><span class="bill-line-icon">⚙️</span> Platform Fee</span>
+          <span class="bill-line-value" id="summary-platform">₹5.00</span>
+        </div>
+        <div class="bill-line">
+          <span class="bill-line-label"><span class="bill-line-icon">🏛️</span> GST &amp; Taxes</span>
+          <span class="bill-line-value" id="summary-tax">₹29.90</span>
+        </div>
+        <div class="bill-line">
+          <span class="bill-line-label"><span class="bill-line-icon">🎟️</span> Coupon Discount</span>
+          <span class="bill-line-value discount" id="summary-discount">− ₹50.00</span>
+        </div>
+        <div class="bill-total-row">
+          <span class="bill-total-label">Grand Total</span>
+          <span class="bill-total-amount" id="summary-total">₹611.90</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ORDER TIMELINE ─────────────────── -->
+    <div class="timeline-section">
+      <div class="section-title">Order Status</div>
+
+      <div class="timeline-track" style="--progress: 75%">
+        <div class="timeline-step">
+          <div class="timeline-dot done">✓</div>
+          <div class="timeline-label done">Order<br>Placed</div>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot done">✓</div>
+          <div class="timeline-label done">Confirmed</div>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot done">✓</div>
+          <div class="timeline-label done">Packed</div>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot active">🛵</div>
+          <div class="timeline-label active">Out for<br>Delivery</div>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot pending">○</div>
+          <div class="timeline-label">Delivered</div>
+        </div>
+      </div>
+
+      <!-- Delivery Partner Card -->
+      <div class="delivery-card">
+        <div class="rider-info">
+          <div class="rider-avatar">🏍️</div>
+          <div class="rider-details">
+            <div class="rider-name" id="rider-name">Ravi Kumar</div>
+            <div class="rider-meta">
+              <div class="rider-rating">⭐ <span id="rider-rating">4.8</span></div>
+              <div class="rider-vehicle" id="rider-vehicle">KA 05 AB 1234</div>
+            </div>
+          </div>
+        </div>
+        <div class="rider-actions">
+          <a class="call-btn" href="tel:+919876543211">
+            📞 Call Rider
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ACTION BUTTONS ─────────────────── -->
+    <div class="invoice-actions">
+      <button class="btn-primary" onclick="downloadPDF()">
+        ⬇️ &nbsp; Download Invoice
+      </button>
+      <button class="btn-secondary" onclick="shareInvoice()">
+        🔗 &nbsp; Share Invoice
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       APP DOWNLOAD
+  ══════════════════════════════════════════ -->
+  <div style="text-align:center;padding:20px;background:linear-gradient(135deg,#FF6A00,#FF8C00);border-radius:12px;margin:20px 0;">
+    <p style="color:#fff;font-size:16px;font-weight:700;margin:0 0 6px 0;">📱 Download Multiverse City App</p>
+    <p style="color:#fff;font-size:13px;margin:0 0 12px 0;">For shopping, online booking, appointment & real estate</p>
+    <a href="https://play.google.com/store/apps/details?id=com.multiverse.city" style="display:inline-block;margin-right:6px;"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" height="36"></a>
+    <a href="https://apps.apple.com/app/multiverse-city/id123456789"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" height="36"></a>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <footer class="invoice-footer">
+    <div class="footer-thank-you">
+      Thanks for choosing <span>Multiverse City</span> ✨
+    </div>
+    <div class="footer-links">
+      <a class="footer-link" href="mailto:support@multiverse.app">📧 support@multiverse.app</a>
+      <div class="footer-divider"></div>
+      <a class="footer-link" href="https://multiverse.app">🌐 multiverse.app</a>
+      <div class="footer-divider"></div>
+      <a class="footer-link" href="tel:18001234567">📞 1800-123-4567</a>
+    </div>
+  </footer>
+
+</div><!-- /invoice-wrapper -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  MULTIVERSE INVOICE — DATA INJECTION ENGINE
+// ═══════════════════════════════════════════════════════
+
+/**
+ * Invoice Data Schema — pass this object to renderInvoice()
+ */
+const DEFAULT_INVOICE_DATA = {
+  invoice: {
+    number: "INV-2024-00042",
+    orderId: "ORD-8842991",
+    dateTime: "12 Jan '25, 7:42 PM",
+    paymentMethod: "UPI / GPay",
+    paymentStatus: "PAID", // "PAID" | "COD" | "PENDING"
+  },
+  customer: {
+    name: "Arjun Mehta",
+    phone: "+91 98765 43210",
+    address: "Flat 4B, Rosewood Apartments,<br>Koramangala, Bengaluru — 560034",
+  },
+  store: {
+    name: "Multiverse Dark Store #12",
+    gstin: "29AABCU9603R1ZX",
+    phone: "Support: 1800-XXX-XXXX",
+    address: "Plot 7, Sector 4, Industrial Area,<br>HSR Layout, Bengaluru — 560102",
+  },
+  items: [
+    { emoji: "🥤", name: "Tropicana Orange Juice", desc: "1L Pack", qty: 2, unitPrice: 99 },
+    { emoji: "🍫", name: "Dairy Milk Silk", desc: "145g — Oreo", qty: 3, unitPrice: 75 },
+    { emoji: "🌾", name: "Aashirvaad Atta", desc: "5kg — Select", qty: 1, unitPrice: 285 },
+    { emoji: "🧴", name: "Dove Body Lotion", desc: "400ml — Intensive", qty: 1, unitPrice: 199 },
+  ],
+  billing: {
+    deliveryFee: 29,
+    platformFee: 5,
+    taxRate: 0.05,       // 5% GST
+    couponCode: "NEWUSER50",
+    couponDiscount: 50,
+  },
+  rider: {
+    name: "Ravi Kumar",
+    rating: "4.8",
+    vehicle: "KA 05 AB 1234",
+    phone: "+919876543211",
+  },
+  orderStatus: "out_for_delivery", // placed|confirmed|packed|out_for_delivery|delivered
+};
+
+// ─────────────────────────────────────────
+//  RENDER ENGINE
+// ─────────────────────────────────────────
+
+function renderInvoice(data = DEFAULT_INVOICE_DATA) {
+  const inv = data.invoice;
+  const cust = data.customer;
+  const store = data.store;
+  const billing = data.billing;
+  const rider = data.rider;
+
+  // ── Header / Info Cards ──
+  const invNum = `#${inv.number}`;
+  document.getElementById("header-inv-number").textContent = invNum;
+  document.getElementById("inv-number").textContent = invNum;
+  document.getElementById("inv-order-id").textContent = `#${inv.orderId}`;
+  document.getElementById("inv-datetime").textContent = inv.dateTime;
+  document.getElementById("inv-payment-method").textContent = inv.paymentMethod;
+
+  // ── Payment Status Badge ──
+  const badge = document.getElementById("payment-status-badge");
+  const badgeText = document.getElementById("payment-status-text");
+  badgeText.textContent = inv.paymentStatus;
+  badge.className = "status-pill " + (inv.paymentStatus === "PAID" ? "paid" : "cod");
+
+  // ── Customer ──
+  document.getElementById("customer-name").textContent = cust.name;
+  document.getElementById("customer-phone").textContent = cust.phone;
+  document.getElementById("customer-address").innerHTML = cust.address;
+
+  // ── Store ──
+  document.getElementById("store-name").textContent = store.name;
+  document.getElementById("store-address").innerHTML = store.address;
+  document.getElementById("store-phone").textContent = store.phone;
+  document.getElementById("store-gstin").innerHTML = `✓ &nbsp; GSTIN: ${store.gstin}`;
+
+  // ── Items Table ──
+  const tbody = document.getElementById("items-tbody");
+  tbody.innerHTML = "";
+  let subtotal = 0;
+
+  data.items.forEach(item => {
+    const lineTotal = item.qty * item.unitPrice;
+    subtotal += lineTotal;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>
+        <div class="item-cell">
+          <div class="item-img">${item.emoji}</div>
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            <div class="item-desc">${item.desc}</div>
+          </div>
+        </div>
+      </td>
+      <td class="col-qty"><span class="qty-badge">×${item.qty}</span></td>
+      <td class="col-price">₹${item.unitPrice.toFixed(2)}</td>
+      <td class="col-total">₹${lineTotal.toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // ── Bill Summary ──
+  const tax = subtotal * billing.taxRate;
+  const grandTotal = subtotal + billing.deliveryFee + billing.platformFee + tax - billing.couponDiscount;
+
+  document.getElementById("summary-subtotal").textContent = `₹${subtotal.toFixed(2)}`;
+  document.getElementById("summary-delivery").textContent = `₹${billing.deliveryFee.toFixed(2)}`;
+  document.getElementById("summary-platform").textContent = `₹${billing.platformFee.toFixed(2)}`;
+  document.getElementById("summary-tax").textContent = `₹${tax.toFixed(2)}`;
+  document.getElementById("summary-discount").textContent = `− ₹${billing.couponDiscount.toFixed(2)}`;
+  document.getElementById("summary-total").textContent = `₹${grandTotal.toFixed(2)}`;
+  document.getElementById("coupon-code").textContent = billing.couponCode;
+  document.getElementById("coupon-saving").textContent = `₹${billing.couponDiscount}`;
+
+  // ── Rider ──
+  document.getElementById("rider-name").textContent = rider.name;
+  document.getElementById("rider-rating").textContent = rider.rating;
+  document.getElementById("rider-vehicle").textContent = rider.vehicle;
+  document.querySelector(".call-btn").href = `tel:${rider.phone}`;
+
+  // ── QR Code ──
+  const qrContainer = document.getElementById("qrcode");
+  qrContainer.innerHTML = "";
+  try {
+    new QRCode(qrContainer, {
+      text: `https://multiverse.app/invoice/${inv.number}`,
+      width: 72,
+      height: 72,
+      colorDark: "#0f0f0f",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M,
+    });
+  } catch (e) {
+    qrContainer.style.cssText = "width:72px;height:72px;background:#f3f3f3;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#999;text-align:center;";
+    qrContainer.textContent = "QR";
+  }
+}
+
+// ─────────────────────────────────────────
+//  DOWNLOAD PDF  (client-side fallback)
+// ─────────────────────────────────────────
+
+function downloadPDF() {
+  // In browser: use print dialog / save as PDF
+  // In Node.js / Puppeteer: handled by generateInvoice.js
+  const btn = document.querySelectorAll('.invoice-actions');
+  const style = document.createElement('style');
+  style.textContent = '.invoice-actions { display: none !important; }';
+  document.head.appendChild(style);
+  window.print();
+  setTimeout(() => document.head.removeChild(style), 1000);
+}
+
+// ─────────────────────────────────────────
+//  SHARE INVOICE
+// ─────────────────────────────────────────
+
+async function shareInvoice() {
+  const invNum = DEFAULT_INVOICE_DATA.invoice.number;
+  const shareData = {
+    title: 'Multiverse Invoice',
+    text: `Your Multiverse invoice ${invNum} is ready!`,
+    url: `https://multiverse.app/invoice/${invNum}`,
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (_) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+      alert('Invoice link copied to clipboard!');
+    } catch (_) {
+      alert(`Share this link: ${shareData.url}`);
+    }
+  }
+}
+
+// ─────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────
+
+// Expose renderInvoice globally so Puppeteer script can call it
+window.renderInvoice = renderInvoice;
+window.INVOICE_DATA = DEFAULT_INVOICE_DATA;
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderInvoice(DEFAULT_INVOICE_DATA);
+});
+</script>
+</body>
+</html>

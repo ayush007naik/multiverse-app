@@ -1,0 +1,26 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.ayush.multiverse.multiverses.app-mergeDebugResources-87:/values-fil/values-fil.xml",
+            "map": [
+                {
+                    "source": "/Users/ayushnaik/.gradle/caches/8.14/transforms/75895ea72519e17fa4976026e1f91914/transformed/play-services-wallet-18.1.3/res/values-fil/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "203",
+                        "endColumns": "78",
+                        "endOffsets": "281"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "82",
+                        "endOffsets": "133"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,155 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===== HELPER FUNCTIONS =====
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function isVendor() {
+      return isAuthenticated() && getUserRole() == 'vendor';
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserRole() == 'admin';
+    }
+    
+    function isCustomer() {
+      return isAuthenticated() && getUserRole() == 'customer';
+    }
+    
+    function isVendorOwner(vendorId) {
+      return isAuthenticated() && request.auth.uid == vendorId;
+    }
+    
+    function isOrderCustomer(customerId) {
+      return isAuthenticated() && request.auth.uid == customerId;
+    }
+    
+    // ===== USERS COLLECTION =====
+    
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // ===== VENDORS COLLECTION =====
+    
+    match /vendors/{vendorId} {
+      allow read: if isAuthenticated();
+      allow create: if isVendor() && request.auth.uid == vendorId;
+      allow update: if isVendorOwner(vendorId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // ===== PRODUCTS COLLECTION =====
+    
+    match /products/{productId} {
+      allow read: if true; // Public read for customer app
+      allow create: if isVendor();
+      allow update: if isVendor() && resource.data.vendorId == request.auth.uid;
+      allow delete: if isVendor() && resource.data.vendorId == request.auth.uid;
+    }
+    
+    // ===== ORDERS COLLECTION =====
+    
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == resource.data.customerId || 
+        request.auth.uid == resource.data.vendorId || 
+        isAdmin()
+      );
+      
+      allow create: if isAuthenticated() && 
+                       request.auth.uid == request.resource.data.customerId;
+      
+      allow update: if isAuthenticated() && (
+        request.auth.uid == resource.data.vendorId || 
+        request.auth.uid == resource.data.customerId ||
+        isAdmin()
+      );
+      
+      allow delete: if isAdmin();
+    }
+    
+    // ===== OFFERS COLLECTION =====
+    
+    match /offers/{offerId} {
+      allow read: if true; // Public read for customer app
+      allow create: if isVendor();
+      allow update: if isVendor() && resource.data.vendorId == request.auth.uid;
+      allow delete: if isVendor() && resource.data.vendorId == request.auth.uid;
+    }
+    
+    // ===== NOTIFICATIONS COLLECTION =====
+    
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && 
+                     request.auth.uid == resource.data.vendorId;
+      allow create: if isAuthenticated(); // System creates notifications
+      allow update: if isAuthenticated() && 
+                       request.auth.uid == resource.data.vendorId;
+      allow delete: if isAdmin();
+    }
+    
+    // ===== PAYOUTS COLLECTION =====
+    
+    match /payouts/{payoutId} {
+      allow read: if isAuthenticated() && 
+                     request.auth.uid == resource.data.vendorId;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // ===== SHOPS COLLECTION (Legacy) =====
+    
+    match /shops/{shopId} {
+      allow read: if true;
+      allow write: if isAdmin() || (isVendor() && resource.data.vendorId == request.auth.uid);
+    }
+    
+    // ===== CATEGORIES COLLECTION =====
+    
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // ===== BANNERS COLLECTION =====
+    
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // ===== MOVIES COLLECTION =====
+    
+    match /movies/{movieId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // ===== PROPERTIES COLLECTION =====
+    
+    match /properties/{propertyId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // ===== SERVICES COLLECTION =====
+    
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

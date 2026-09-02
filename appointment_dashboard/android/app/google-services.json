@@ -1,0 +1,250 @@
+{
+  "project_info": {
+    "project_number": "89114358837",
+    "project_id": "multiverses-8d207",
+    "storage_bucket": "multiverses-8d207.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89114358837:android:c9e99d0fb20c44143e6d7c",
+        "android_client_info": {
+          "package_name": "com.ayush.multiverse.multiverses"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89114358837-4dsf0ng1gpvvgb9iqlpva724q13p2uuk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ayush.multiverse.multiverses",
+            "certificate_hash": "3e1c1837920d502ff21029dca1a1670253345df3"
+          }
+        },
+        {
+          "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCwrgcpuhh5v7IC8dIfSQdNhym3Z9QL00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89114358837-9k09pfoe2el7586tk8tftv5m2gnf9h09.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ayush.multiverse.multiverses"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89114358837:android:5cf3a89fe73232e03e6d7c",
+        "android_client_info": {
+          "package_name": "com.example.appointment_dashboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCwrgcpuhh5v7IC8dIfSQdNhym3Z9QL00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89114358837-9k09pfoe2el7586tk8tftv5m2gnf9h09.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ayush.multiverse.multiverses"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89114358837:android:7fb4fcd9345dd1263e6d7c",
+        "android_client_info": {
+          "package_name": "com.example.theatre_scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCwrgcpuhh5v7IC8dIfSQdNhym3Z9QL00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89114358837-9k09pfoe2el7586tk8tftv5m2gnf9h09.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ayush.multiverse.multiverses"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89114358837:android:a63108a2c2adeec93e6d7c",
+        "android_client_info": {
+          "package_name": "com.multiverse.appointment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89114358837-1n9sm10a33hghdis54nctmhi0liiuj01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.multiverse.appointment",
+            "certificate_hash": "9d90acff948b987feddd9765b0908c66ff31dce5"
+          }
+        },
+        {
+          "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCwrgcpuhh5v7IC8dIfSQdNhym3Z9QL00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89114358837-9k09pfoe2el7586tk8tftv5m2gnf9h09.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ayush.multiverse.multiverses"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89114358837:android:1f19a6c1b54565373e6d7c",
+        "android_client_info": {
+          "package_name": "com.multiverse.delivery_partner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCwrgcpuhh5v7IC8dIfSQdNhym3Z9QL00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89114358837-9k09pfoe2el7586tk8tftv5m2gnf9h09.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ayush.multiverse.multiverses"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89114358837:android:8391df723c65ecac3e6d7c",
+        "android_client_info": {
+          "package_name": "com.multiverse.theatre.scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89114358837-6f5pa0sh97ucst6ohkknujcqbhlmukqg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.multiverse.theatre.scanner",
+            "certificate_hash": "9d90acff948b987feddd9765b0908c66ff31dce5"
+          }
+        },
+        {
+          "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCwrgcpuhh5v7IC8dIfSQdNhym3Z9QL00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89114358837-9t3ljqqq381spi2lstisuv2i3qqo16bu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "89114358837-9k09pfoe2el7586tk8tftv5m2gnf9h09.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ayush.multiverse.multiverses"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
