@@ -3,7 +3,8 @@
 # the vendor app's build config at the resulting stable URL.
 #
 #   cp image_search_service/cloudrun.env.yaml.example image_search_service/cloudrun.env.yaml
-#   # fill in FIREBASE_API_KEY and SUPABASE_SERVICE_ROLE_KEY
+#   # fill in FIREBASE_PROJECT_ID (must match firebase_options.dart) and
+#   # SUPABASE_SERVICE_ROLE_KEY
 #   ./image_search_service/deploy_cloudrun.sh
 #
 # After this, build the app with:
@@ -42,6 +43,23 @@ fi
 # update can never leave the endpoints open.
 if ! grep -qE '^\s*REQUIRE_AUTH:\s*"true"' "$ENVFILE"; then
   echo "REQUIRE_AUTH must be \"true\" in $ENVFILE" >&2
+  exit 1
+fi
+
+# Tokens are verified against Google's certs for this project id. If it does
+# not match the one the app signs users into, the service looks configured but
+# rejects every vendor with a 401 and the dashboard reports it as a bad session.
+# That mistake cost a round-trip to the vendor already; catch it here instead.
+APP_PROJECT="$(sed -n "s/.*projectId:[[:space:]]*'\([^']*\)'.*/\1/p" \
+  "$ROOT/vendor_dashboard/lib/firebase_options.dart" | head -1)"
+ENV_PROJECT="$(sed -n 's/^FIREBASE_PROJECT_ID:[[:space:]]*"\([^"]*\)".*/\1/p' "$ENVFILE" | head -1)"
+if [ -z "$ENV_PROJECT" ]; then
+  echo "FIREBASE_PROJECT_ID is missing from $ENVFILE" >&2
+  exit 1
+fi
+if [ -n "$APP_PROJECT" ] && [ "$APP_PROJECT" != "$ENV_PROJECT" ]; then
+  echo "Project mismatch: the app signs in to '$APP_PROJECT' but $ENVFILE" >&2
+  echo "sets FIREBASE_PROJECT_ID to '$ENV_PROJECT'. Every vendor would get a 401." >&2
   exit 1
 fi
 
@@ -145,7 +163,11 @@ fi
 # that made image lookups stop working with no error anywhere. Refuse rather
 # than warn.
 APP_DART="$ROOT/vendor_dashboard/lib/services/product_image_search_service.dart"
-COMPILED_URL="$(sed -n "s/.*_defaultUrl =\s*'\([^']*\)'.*/\1/p" "$APP_DART" | tail -1)"
+# The URL is usually wrapped onto its own line by the formatter, so join the
+# file into one stream before matching rather than assuming a single line.
+COMPILED_URL="$(tr '\n' ' ' < "$APP_DART" \
+  | grep -o "_defaultUrl =[[:space:]]*'[^']*'" \
+  | head -1 | sed "s/.*'\([^']*\)'.*/\1/")"
 if [ -z "$COMPILED_URL" ]; then
   echo "could not read _defaultUrl from $APP_DART" >&2
   exit 1

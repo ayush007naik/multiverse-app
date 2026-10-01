@@ -1784,6 +1784,137 @@ check(
 )
 
 print()
+print("--- auth ---------------------------------------------------------")
+
+# The door is the one thing a broken build locks every vendor out of, and the
+# bug it replaced (calling identitytoolkit accounts:lookup with an ID token)
+# rejected real, valid tokens. These run offline against a locally minted key
+# pair so a regression cannot wait for the network to notice.
+import asyncio as _asyncio  # noqa: E402
+
+import jwt as _jwt  # noqa: E402
+
+from image_search_service import main as service_main  # noqa: E402
+
+try:
+    from cryptography.hazmat.primitives import hashes as _hashes
+    from cryptography.hazmat.primitives.asymmetric import rsa as _rsa
+    from cryptography.hazmat.primitives import serialization as _ser
+
+    _TEST_KEY = _rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    _TEST_KID = "test-key-1"
+
+    def _mint(aud="multiverses-8d207", sub="vendor-1", exp=9999999999, **over):
+        claims = {
+            "aud": aud,
+            "iss": f"https://securetoken.google.com/{aud}",
+            "sub": sub,
+            "email": "vendor@example.com",
+            "iat": 1790000000,
+            "exp": exp,
+        }
+        claims.update(over)
+        return _jwt.encode(claims, _TEST_KEY, algorithm="RS256", headers={"kid": _TEST_KID})
+
+    async def _verify(token):
+        async def _certs(force=False):
+            return {
+                _TEST_KID: _TEST_KEY.public_key()
+                .public_bytes(
+                    _ser.Encoding.PEM, _ser.PublicFormat.SubjectPublicKeyInfo
+                )
+                .decode()
+            }
+
+        real_certs = service_main._google_certs
+        real_project = service_main._firebase_project_id
+        service_main._google_certs = _certs
+        service_main._firebase_project_id = lambda: "multiverses-8d207"
+        try:
+            return await service_main._verify_firebase_token(token)
+        finally:
+            service_main._google_certs = real_certs
+            service_main._firebase_project_id = real_project
+
+    ok = _asyncio.run(_verify(_mint()))
+    check(
+        "a valid token is accepted and the vendor identified",
+        ok["uid"] == "vendor-1" and ok["email"] == "vendor@example.com",
+        str(ok),
+    )
+
+    def _rejects(label, token, want_status=401):
+        try:
+            _asyncio.run(_verify(token))
+            check(f"{label} is rejected", False, "accepted it")
+        except Exception as exc:  # noqa: BLE001 - any refusal is a pass
+            status = getattr(exc, "status_code", None)
+            check(f"{label} is rejected", status == want_status, f"{status}: {exc}")
+
+    good = _mint()
+    _rejects("an expired token", _mint(exp=1000))
+    _rejects(
+        "a token signed for another project",
+        _mint(aud="attacker-project"),
+    )
+    _rejects(
+        "a tampered signature",
+        good[:-6] + ("AAAAAA" if not good.endswith("AAAAAA") else "BBBBBB"),
+    )
+    # An HMAC token claiming Google's key id: the classic alg-confusion attack.
+    # Rejecting it means pinning RS256, so verify that explicitly.
+    _rejects(
+        "a token signed by a non-Google key",
+        _jwt.encode(
+            {
+                "aud": "multiverses-8d207",
+                "iss": "https://securetoken.google.com/multiverses-8d207",
+                "sub": "attacker",
+                "iat": 1790000000,
+                "exp": 9999999999,
+            },
+            "attacker-secret",
+            algorithm="HS256",
+            headers={"kid": _TEST_KID},
+        ),
+    )
+    _rejects("a malformed token", "not-a-jwt")
+    _rejects("an unsigned token", "..")
+
+    async def _no_project():
+        # Blank the env var rather than replacing the function, so the real
+        # guard runs. _google_certs is patched too, to keep this offline.
+        real_env = os.environ.get("FIREBASE_PROJECT_ID")
+        real_certs = service_main._google_certs
+
+        async def _certs(force=False):
+            return {}
+
+        os.environ["FIREBASE_PROJECT_ID"] = ""
+        service_main._google_certs = _certs
+        try:
+            await service_main._verify_firebase_token(good)
+            return None
+        except Exception as exc:  # noqa: BLE001
+            return exc
+        finally:
+            if real_env is None:
+                os.environ.pop("FIREBASE_PROJECT_ID", None)
+            else:
+                os.environ["FIREBASE_PROJECT_ID"] = real_env
+            service_main._google_certs = real_certs
+
+    missing = _asyncio.run(_no_project())
+    check(
+        "a missing project id fails loudly instead of accepting anyone",
+        getattr(missing, "status_code", None) == 500,
+        str(missing),
+    )
+
+except ImportError:  # pragma: no cover - crypto not installed
+    print("  SKIP  auth checks (install requirements.txt)")
+
+print()
 if FAILURES:
     print(f"{len(FAILURES)} failing check(s): {FAILURES}")
     sys.exit(1)

@@ -4,3 +4,4 @@ httpx==0.28.1
 pillow==11.1.0
 firebase-admin==6.6.0
 pydantic-settings==2.7.1
+PyJWT[crypto]==2.15.1

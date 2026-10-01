@@ -1,0 +1,106 @@
+{
+    "query": "Amul Amul Butter 500g",
+    "found": true,
+    "candidates": [
+        {
+            "full_url": "https://images.openfoodfacts.org/images/products/890/126/220/0004/front_en.3.400.jpg",
+            "thumbnail_url": "https://images.openfoodfacts.org/images/products/890/126/220/0004/front_en.3.400.jpg",
+            "hosted_url": "https://ufvwjmtfbupnnpbivcxr.supabase.co/storage/v1/object/public/global_products/e2e_verify/auto_920fab6d110e9fe78c13701a22a8d03d4459cad4.jpg",
+            "title": "amul butter milk amul",
+            "tags": "500ml Buttermilks",
+            "source": "openfoodfacts",
+            "source_page": "https://world.openfoodfacts.org/product/8901262200004",
+            "license": "ODbL",
+            "attribution": "Open Food Facts contributors \u00b7 ODbL",
+            "requires_attribution": true,
+            "width": 213,
+            "height": 400,
+            "score": 0.77,
+            "brand_match": true,
+            "matched_by": "similar"
+        },
+        {
+            "full_url": "https://images.openfoodfacts.org/images/products/394/826/220/0196/front_en.3.400.jpg",
+            "thumbnail_url": "https://images.openfoodfacts.org/images/products/394/826/220/0196/front_en.3.400.jpg",
+            "hosted_url": "https://ufvwjmtfbupnnpbivcxr.supabase.co/storage/v1/object/public/global_products/e2e_verify/auto_36a081d5c6cb843390af5f2118178150e65c5267.jpg",
+            "title": "amul butter masti 15",
+            "tags": "",
+            "source": "openfoodfacts",
+            "source_page": "https://world.openfoodfacts.org/product/3948262200196",
+            "license": "ODbL",
+            "attribution": "Open Food Facts contributors \u00b7 ODbL",
+            "requires_attribution": true,
+            "width": 205,
+            "height": 400,
+            "score": 0.746,
+            "brand_match": true,
+            "matched_by": "similar"
+        },
+        {
+            "full_url": "https://images.openfoodfacts.org/images/products/890/126/222/1382/front_en.3.400.jpg",
+            "thumbnail_url": "https://images.openfoodfacts.org/images/products/890/126/222/1382/front_en.3.400.jpg",
+            "hosted_url": "https://ufvwjmtfbupnnpbivcxr.supabase.co/storage/v1/object/public/global_products/e2e_verify/auto_6465cdc62773170de47a3336bf5ae02fa4f6ce05.jpg",
+            "title": "amul butter nankhatai",
+            "tags": "Biscuits",
+            "source": "openfoodfacts",
+            "source_page": "https://world.openfoodfacts.org/product/8901262221382",
+            "license": "ODbL",
+            "attribution": "Open Food Facts contributors \u00b7 ODbL",
+            "requires_attribution": true,
+            "width": 300,
+            "height": 400,
+            "score": 0.746,
+            "brand_match": true,
+            "matched_by": "similar"
+        },
+        {
+            "full_url": "https://images.openfoodfacts.org/images/products/890/126/201/0320/front_en.3.400.jpg",
+            "thumbnail_url": "https://images.openfoodfacts.org/images/products/890/126/201/0320/front_en.3.400.jpg",
+            "hosted_url": "https://ufvwjmtfbupnnpbivcxr.supabase.co/storage/v1/object/public/global_products/e2e_verify/auto_955a69269e8a2dedc71865700d0580292e569f45.jpg",
+            "title": "amul amul butter",
+            "tags": "200gm Butters",
+            "source": "openfoodfacts",
+            "source_page": "https://world.openfoodfacts.org/product/8901262010320",
+            "license": "ODbL",
+            "attribution": "Open Food Facts contributors \u00b7 ODbL",
+            "requires_attribution": true,
+            "width": 400,
+            "height": 323,
+            "score": 0.7436,
+            "brand_match": true,
+            "matched_by": "similar"
+        }
+    ],
+    "best": {
+        "full_url": "https://images.openfoodfacts.org/images/products/890/126/220/0004/front_en.3.400.jpg",
+        "thumbnail_url": "https://images.openfoodfacts.org/images/products/890/126/220/0004/front_en.3.400.jpg",
+        "hosted_url": "https://ufvwjmtfbupnnpbivcxr.supabase.co/storage/v1/object/public/global_products/e2e_verify/auto_920fab6d110e9fe78c13701a22a8d03d4459cad4.jpg",
+        "title": "amul butter milk amul",
+        "tags": "500ml Buttermilks",
+        "source": "openfoodfacts",
+        "source_page": "https://world.openfoodfacts.org/product/8901262200004",
+        "license": "ODbL",
+        "attribution": "Open Food Facts contributors \u00b7 ODbL",
+        "requires_attribution": true,
+        "width": 213,
+        "height": 400,
+        "score": 0.77,
+        "brand_match": true,
+        "matched_by": "similar"
+    },
+    "provider_status": {
+        "openfoodfacts": {
+            "ok": true,
+            "count": 20
+        },
+        "wikimedia": {
+            "ok": true,
+            "count": 3
+        },
+        "openverse": {
+            "ok": true,
+            "count": 0
+        }
+    },
+    "duration_ms": 5118
+}

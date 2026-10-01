@@ -224,6 +224,43 @@ class ProductImageSelection {
   }
 }
 
+/// Why a photo lookup came back without a photo.
+enum ImageLookupFailure {
+  /// The service answered and had nothing good enough. Not an error.
+  none,
+
+  /// The service rejected this session (401/403). Signing in again fixes it.
+  unauthorized,
+
+  /// The service could not be reached, timed out, or answered 5xx.
+  unreachable,
+
+  /// Anything else, including a malformed response.
+  error,
+}
+
+/// A photo lookup that reports *why* it came back empty.
+///
+/// `findExactImage` answers null for both "the service had nothing good enough"
+/// and "the request failed", which is the same thing to the spreadsheet
+/// importer: products imported, no photos, no explanation. A vendor who turned
+/// photo lookup on has no way to tell a product with no photo on the internet
+/// from a rejected session or a dead endpoint.
+class ImageLookupOutcome {
+  /// The photo to attach, or null when there is none to attach.
+  final String? url;
+  final ImageLookupFailure reason;
+
+  /// True when the lookup itself failed, as opposed to finding nothing.
+  bool get failed => reason != ImageLookupFailure.none;
+
+  const ImageLookupOutcome(this.url, this.reason);
+
+  const ImageLookupOutcome.found(String url)
+    : this(url, ImageLookupFailure.none);
+  const ImageLookupOutcome.notFound() : this(null, ImageLookupFailure.none);
+}
+
 /// Talks to the Python image search service (`image_search_service/`).
 ///
 /// The service finds candidate photos on the internet, verifies them by
@@ -311,11 +348,80 @@ class ProductImageSearchService {
     return _parseResult(body);
   }
 
+/// A photo lookup that reports *why* it came back empty.
+  ///
+  /// `findExactImage` answers null for both "the service had nothing good
+  /// enough" and "the request failed", which is the same thing to the
+  /// spreadsheet importer: products imported, no photos, no explanation. A
+  /// vendor who turned photo lookup on has no way to tell a product with no
+  /// photo on the internet from a rejected session or a dead endpoint.
+  ///
+  /// Never throws. A failed lookup must never fail an otherwise good import.
+  Future<ImageLookupOutcome> lookupImage({
+    required String name,
+    String brand = '',
+    String variant = '',
+    String category = '',
+    String subcategory = '',
+    String description = '',
+    String barcode = '',
+    String? folder,
+    Duration timeout = _resolveTimeout,
+  }) async {
+    try {
+      final body = await _post('/resolve', {
+        'product': _productPayload(
+          name: name,
+          brand: brand,
+          variant: variant,
+          category: category,
+          subcategory: subcategory,
+          description: description,
+          barcode: barcode,
+        ),
+        if (folder != null && folder.isNotEmpty) 'folder': folder,
+        'verify_candidates': 3,
+      }, timeout);
+      final bestMap = _mapOrNull(body['best']);
+      if (bestMap == null) return const ImageLookupOutcome.notFound();
+      final best = ProductImageCandidate.fromJson(bestMap);
+      return best.displayUrl.isEmpty
+          ? const ImageLookupOutcome.notFound()
+          : ImageLookupOutcome.found(best.displayUrl);
+    } on ImageSearchUnavailable catch (e) {
+      // The message is written for a human, and _post distinguishes the causes
+      // by what it says, so it is read here rather than duplicating the
+      // classification. Matching on wording is fragile in principle, but these
+      // are two strings in one file.
+      final text = e.message.toLowerCase();
+      if (text.contains('expired')) {
+        // The vendor's own sign-in went stale. Re-authenticating fixes it.
+        return const ImageLookupOutcome(null, ImageLookupFailure.unauthorized);
+      }
+      if (text.contains('could not verify') || text.contains('unexpected response')) {
+        // The service answered, but either rejected a token it should have been
+        // able to verify or sent back something this client cannot read -- a
+        // project-id mismatch, a deploy mid-rollout, a proxy error page. Nothing
+        // the vendor can fix, and not their session either, so it is reported as
+        // a server fault rather than sent to sign in again.
+        return const ImageLookupOutcome(null, ImageLookupFailure.error);
+      }
+      return const ImageLookupOutcome(null, ImageLookupFailure.unreachable);
+    } on TimeoutException {
+      return const ImageLookupOutcome(null, ImageLookupFailure.unreachable);
+    } on http.ClientException {
+      return const ImageLookupOutcome(null, ImageLookupFailure.unreachable);
+    } on FormatException {
+      return const ImageLookupOutcome(null, ImageLookupFailure.error);
+    }
+  }
+
   /// The single best photo, or null when the service is not confident.
   ///
   /// Used by the spreadsheet importer, which must not attach a guess. Failures
   /// are swallowed and reported as "no image" so a flaky image service can
-  /// never fail an otherwise good import.
+  /// never fail an otherwise good import. Prefer [lookupImage] when the caller
+  /// can show the vendor why nothing was found.
   Future<ProductImageCandidate?> findExactImage({
     required String name,
     String brand = '',
@@ -448,8 +554,20 @@ class ProductImageSearchService {
           .timeout(timeout);
 
       if (response.statusCode == 401 || response.statusCode == 403) {
+        // The service distinguishes an expired token from one it cannot verify at
+        // all, and the two need different answers from the vendor: one is fixed
+        // by signing in again, the other is a server-side config problem they
+        // cannot fix and should not be sent to re-authenticate for. Both were
+        // previously reported as "sign out and back in", which sent us looking
+        // at the vendor's session when the token was never the problem.
+        final detail = _errorFrom(response).toLowerCase();
+        if (detail.contains('expired')) {
+          throw const ImageSearchUnavailable(
+            'This session has expired. Sign out and sign in again.',
+          );
+        }
         throw const ImageSearchUnavailable(
-          'The image service rejected this session. Sign out and sign in again.',
+          'The image service could not verify this sign-in.',
         );
       }
       if (response.statusCode >= 500) {

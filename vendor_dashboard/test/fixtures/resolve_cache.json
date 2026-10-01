@@ -1,0 +1,29 @@
+{
+    "query": "Colgate Colgate Strong Teeth Toothpaste 150g",
+    "found": true,
+    "candidates": [],
+    "best": {
+        "full_url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Colgate_toothpaste_in_Rt-Mart_Xingtang-20240303.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "thumbnail_url": "https://ufvwjmtfbupnnpbivcxr.supabase.co/storage/v1/object/public/global_products/e2e_verify/auto_8c06905bea5b2b63260f3b03de3d20de62febdfa.jpg",
+        "hosted_url": "https://ufvwjmtfbupnnpbivcxr.supabase.co/storage/v1/object/public/global_products/e2e_verify/auto_8c06905bea5b2b63260f3b03de3d20de62febdfa.jpg",
+        "title": "Colgate toothpaste in Rt-Mart Xingtang-20240303",
+        "tags": "",
+        "source": "wikimedia",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Colgate_toothpaste_in_Rt-Mart_Xingtang-20240303.jpg",
+        "license": "CC BY-SA 4.0",
+        "attribution": "Shwangtianyuan \u00b7 CC BY-SA 4.0",
+        "requires_attribution": true,
+        "width": 900,
+        "height": 1200,
+        "score": 1.0,
+        "brand_match": true,
+        "matched_by": "cache"
+    },
+    "provider_status": {
+        "cache": {
+            "ok": true,
+            "count": 1
+        }
+    },
+    "duration_ms": 0
+}

@@ -112,31 +112,126 @@ async def require_vendor(
             raise HTTPException(status_code=401, detail="malformed bearer token")
         return {"uid": "firebase"}
 
+    return await _verify_firebase_token(token)
+
+
+_CERTS_URL = (
+    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+)
+_ISSUER_PREFIX = "https://securetoken.google.com/"
+_certs: dict[str, str] = {}
+_certs_fetched_at = 0.0
+_CERTS_TTL_SECONDS = 3600.0
+
+
+async def _google_certs(force: bool = False) -> dict[str, str]:
+    """Google's public signing certs, refetched hourly.
+
+    Firebase rotates these roughly every week and the client caches them the
+    same way, so a cached copy can briefly lag a rotation. Refetching on a
+    failed verification keeps that from becoming a vendor-facing outage.
+    """
+    global _certs, _certs_fetched_at
+    now = time.monotonic()
+    if _certs and not force and now - _certs_fetched_at < _CERTS_TTL_SECONDS:
+        return _certs
     try:
-        response = await client().get(
-            "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-            params={"key": _firebase_api_key()},
-            headers={"Authorization": f"Bearer {token}"},
+        response = await client().get(_CERTS_URL)
+        response.raise_for_status()
+        _certs = {kid: _public_key_pem(cert) for kid, cert in response.json().items()}
+        _certs_fetched_at = now
+    except (httpx.HTTPError, ValueError) as exc:
+        if _certs:
+            return _certs  # stale certs beat no certs
+        raise HTTPException(
+            status_code=503, detail=f"could not fetch signing certs: {exc}"
+        ) from exc
+    return _certs
+
+
+async def _verify_firebase_token(token: str) -> dict[str, str]:
+    """Verify a Firebase ID token by checking its signature against Google's
+    public certs, locally.
+
+    The obvious move here is to call Identity Toolkit's ``accounts:lookup``,
+    but that endpoint does not accept an ID token as a bearer credential -- it
+    wants an OAuth access token or API key, so it 401s every request and every
+    real vendor gets locked out. Signature verification is also strictly
+    stronger: it confirms the token was signed by Google for *our* project and
+    has not expired, which is all the door actually needs.
+    """
+    import jwt
+
+    project = _firebase_project_id()
+    try:
+        kid = jwt.get_unverified_header(token).get("kid")
+    except jwt.PyJWTError as exc:
+        raise HTTPException(status_code=401, detail=f"malformed token: {exc}") from exc
+    if not kid:
+        raise HTTPException(status_code=401, detail="token has no key id")
+
+    certs = await _google_certs()
+    cert = certs.get(kid)
+    if cert is None:
+        certs = await _google_certs(force=True)
+        cert = certs.get(kid)
+    if cert is None:
+        raise HTTPException(status_code=401, detail=f"unknown signing key {kid}")
+
+    expected_aud = _ISSUER_PREFIX + project
+    try:
+        claims = jwt.decode(
+            token,
+            cert,
+            algorithms=["RS256"],
+            audience=project,
+            issuer=expected_aud,
+            options={"require": ["exp", "iat", "sub", "aud"]},
         )
-    except httpx.HTTPError as exc:
-        raise HTTPException(status_code=503, detail=f"auth check failed: {exc}") from exc
+    except jwt.ExpiredSignatureError as exc:
+        raise HTTPException(status_code=401, detail="token expired") from exc
+    except jwt.PyJWTError as exc:
+        raise HTTPException(status_code=401, detail=f"invalid token: {exc}") from exc
 
-    if response.status_code >= 400 or not response.json().get("users"):
-        raise HTTPException(status_code=401, detail="invalid or expired token")
-    user = response.json()["users"][0]
-    return {"uid": user.get("localId"), "email": user.get("email")}
+    auth_time = claims.get("auth_time")
+    return {
+        "uid": str(claims.get("sub") or claims.get("user_id") or "firebase"),
+        "email": str(claims.get("email") or ""),
+        "auth_time": str(auth_time) if auth_time is not None else "",
+    }
 
 
-def _firebase_api_key() -> str:
+def _public_key_pem(certificate: str) -> str:
+    """Pull the public key out of a Google x509 signing certificate.
+
+    The x509 endpoint returns bare certificates, but the JWT verifier wants a
+    public key. Importing ``cryptography`` only for this keeps the RSA
+    parsing out of hand-rolled code.
+    """
+    from cryptography import x509
+    from cryptography.hazmat.primitives import serialization
+
+    return (
+        x509.load_pem_x509_certificate(certificate.encode())
+        .public_key()
+        .public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo,
+        )
+        .decode()
+    )
+
+
+def _firebase_project_id() -> str:
     import os
 
-    key = os.environ.get("FIREBASE_API_KEY", "")
-    if not key:
+    project = os.environ.get("FIREBASE_PROJECT_ID", "").strip()
+    if not project:
         raise HTTPException(
             status_code=500,
-            detail="FIREBASE_API_KEY is required when REQUIRE_AUTH=true",
+            detail="FIREBASE_PROJECT_ID is required when REQUIRE_AUTH=true",
         )
-    return key
+    return project
 
 
 # ---------------------------------------------------------------------------

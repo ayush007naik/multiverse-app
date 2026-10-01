@@ -1,0 +1,21 @@
+{
+    "query": "Zzzz Nonexistent Widget 9999",
+    "found": false,
+    "candidates": [],
+    "best": null,
+    "provider_status": {
+        "openfoodfacts": {
+            "ok": true,
+            "count": 0
+        },
+        "wikimedia": {
+            "ok": true,
+            "count": 0
+        },
+        "openverse": {
+            "ok": true,
+            "count": 0
+        }
+    },
+    "duration_ms": 3018
+}

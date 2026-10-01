@@ -20,6 +20,11 @@ class _ExcelImportScreenState extends State<ExcelImportScreen> {
 
   ImportProgress? _progress;
   List<ImportResultRow>? _results;
+
+  /// How the photo lookups in the last run actually went, so the results panel
+  /// can distinguish "no photo exists for these products" from "photo lookup
+  /// never worked".
+  ImageLookupStats? _imageStats;
   bool _importing = false;
   bool _cancelled = false;
   bool _isGstRegistered = true;
@@ -120,9 +125,11 @@ class _ExcelImportScreenState extends State<ExcelImportScreen> {
       _cancelled = false;
       _progress = ImportProgress.initial(0);
       _results = null;
+      _imageStats = null;
     });
 
     try {
+      final stats = ImageLookupStats();
       final results = await _service.import(
         bytes: bytes,
         fileName: fileName,
@@ -130,6 +137,7 @@ class _ExcelImportScreenState extends State<ExcelImportScreen> {
         forceGstZero: !_isGstRegistered,
         autoFindImages: _autoFindImages,
         isCancelled: () => _cancelled,
+        onImageStats: stats,
         onProgress: (p) {
           if (mounted) setState(() => _progress = p);
         },
@@ -139,6 +147,7 @@ class _ExcelImportScreenState extends State<ExcelImportScreen> {
       setState(() {
         _importing = false;
         _results = results;
+        _imageStats = stats;
       });
     } catch (e) {
       if (!mounted) return;
@@ -157,12 +166,14 @@ class _ExcelImportScreenState extends State<ExcelImportScreen> {
     });
 
     List<ImportResultRow> results;
+    final stats = ImageLookupStats();
     try {
       results = await _service.retryFailed(
         previous: previous,
         vendorId: widget.vendorId,
         forceGstZero: !_isGstRegistered,
         autoFindImages: _autoFindImages,
+        onImageStats: stats,
         onProgress: (p) {
           if (mounted) setState(() => _progress = p);
         },
@@ -188,6 +199,10 @@ class _ExcelImportScreenState extends State<ExcelImportScreen> {
     setState(() {
       _importing = false;
       _results = merged;
+      // A retry only re-attempts rows that failed to *write*, so its photo
+      // lookups are a separate set of numbers from the original run's. Replaced
+      // rather than merged, so the line describes what this retry actually did.
+      _imageStats = stats;
     });
   }
 
@@ -516,6 +531,38 @@ class _ExcelImportScreenState extends State<ExcelImportScreen> {
             '${results.length} total • ${results.length - failed} imported • $failed skipped/failed',
             style: const TextStyle(color: Color(0xFF9A9A9A), fontSize: 12),
           ),
+          // A run with photo lookup on used to be indistinguishable from one
+          // where it silently never worked: products imported, no photos, no
+          // explanation. This line says which of the two happened.
+          if (_imageStats != null && _imageStats!.headline != null) ...[
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  _imageStats!.serviceBroken
+                      ? Icons.warning_amber_rounded
+                      : Icons.image_outlined,
+                  size: 15,
+                  color: _imageStats!.serviceBroken
+                      ? const Color(0xFFFF9800)
+                      : const Color(0xFF9A9A9A),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    _imageStats!.headline!,
+                    style: TextStyle(
+                      color: _imageStats!.serviceBroken
+                          ? const Color(0xFFFF9800)
+                          : const Color(0xFF9A9A9A),
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 12),
           if (failed > 0)
             Row(
