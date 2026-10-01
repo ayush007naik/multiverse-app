@@ -33,13 +33,45 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Image search service: the provider/resolve cache defaults to a sqlite file
+# beside the package, and the container redirects it to /tmp.
+image_search_service/cache.sqlite3
+image_search_service/*.sqlite3
+# Local virtualenv. requirements.txt is what belongs in the repo; the installed
+# packages are platform-specific binaries and would bloat every clone.
+image_search_service/.venv/
+
 # Symbolication related
 app.*.symbols
 
 # Obfuscation related
 app.*.map.json
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Stakpak session files
+.stakpak/session*
+
+# Sensitive data — NEVER commit
+accounts.json
+firebase_backup.json
+config.json
+*.env
+key.properties
+*.jks
+*.keystore
+
+# Local properties (contains SDK paths)
+local.properties
+
+# Agent session checkpoints (may contain code snapshots with secrets)
+.proxyai/
+image_search_service/cloudrun.env.yaml
